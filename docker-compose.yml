@@ -1,0 +1,55 @@
+version: "3.7"
+
+services:
+  server:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: server
+    ports:
+      - "5050:3000"
+    container_name: server
+    restart: always
+    links:
+      - holuba_db
+    depends_on: 
+      - holuba_db
+    env_file: ./backend/.env
+    networks:
+      - backend-connect
+  
+  holuba_db:
+    image: mysql:latest
+    hostname: "holuba_db"
+    environment:
+      MYSQL_USER: ssafy
+      MYSQL_DATABASE: holuba_db
+      MYSQL_PASSWORD: ssafy
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    ports:
+      - "3306:3306"
+    container_name: holuba_db
+    networks:
+      - backend-connect
+  
+  web:
+    container_name: web
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: web
+    volumes:
+      - ".:/app"
+      - "/app/node_modules"
+      # - "/etc/letsencrypt/:/etc/letsencrypt/"
+      # - "/etc/ssl/:/etc/ssl/"
+    ports:
+      - "5080:80"
+    environment:
+      - NODE_ENV=development
+    restart: always
+
+networks:
+  backend-connect:
+    driver: bridge
+

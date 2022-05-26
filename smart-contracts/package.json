@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "ethereumjs-tx": "^2.1.2",
+    "grpc": "^1.24.11",
+    "web3": "^1.6.1"
+  },
+  "devDependencies": {
+    "@truffle/hdwallet-provider": "^2.0.4"
+  }
+}
